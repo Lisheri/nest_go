@@ -8,9 +8,11 @@ import { AppService2 } from './app2.service';
 import { ListModule } from './list/list.module';
 import { ConfigModule } from '@/config/config.module';
 import { UploadModule } from './upload/upload.module';
+import { LoginModule } from './login/login.module';
+import { SpiderModule } from './spider/spider.module';
 
 @Module({
-  imports: [DemoModule, UserModule, ListModule, ConfigModule.forRoot({isTeacher: true}), UploadModule],
+  imports: [DemoModule, UserModule, ListModule, ConfigModule.forRoot({isTeacher: true}), UploadModule, LoginModule, SpiderModule],
   controllers: [AppController, DemoController],
   // providers: [AppService], // 简写
   providers: [

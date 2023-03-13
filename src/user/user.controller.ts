@@ -9,11 +9,25 @@ import {
   Response,
   Param,
   Session,
+  ParseIntPipe, // 管道, 用于转换参数到数字
+  ParseUUIDPipe
+  // ParseFloatPipe
+  // ParseBoolPipe
+  // ParseArrayPipe
+  // ParseUUIDPipe
+  // ParseEnumPipe
+  // DefaultValuePipe
 } from '@nestjs/common'; // 参数装饰器
 import { Code } from 'src/constants';
 import { UserService } from './user.service';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
+import * as uuid from 'uuid';
+
+// TODO UUID 的生成有很多种, v1的方式是利用mac(物理)地址进行加密, 但是mac地址可能会重复(尽管几率不大)
+// TODO v3采用混乱算法进行加密, 同样可能会重复
+// TODO v4 通过随机数进行生成, 这个不那么容易重复
+console.info(uuid.v4())
 
 @Controller({
   path: 'user',
@@ -43,6 +57,23 @@ export class UserController {
       message: query.name,
       data: { id },
     };
+  }
+
+  @Get('get_pipe/:id')
+  // 直接将 ParseIntPipe 管道, 传递给装饰器的第二个参数, 就可以将装饰参数转换为对应的类型, 比如这里的number
+  getPipe(@Param('id', ParseIntPipe) id) {
+    // 可以看到这里的默认接收到的id是一个string类型, 但有时服务端需要的是一个number
+    // 此时可以利用 ParseIntPipe 这个管道对收到的数据进行处理
+    console.info(typeof id, id);
+    return id;
+  }
+
+  @Get('get_uuid_pipe/:id')
+  // 这里需要一个uuid, 需要装一个人插件, 就叫uuid
+  // 这个 ParseUUIDPipe 管道, 主要用于验证接收参数是否为一个 uuid, 如果不是uuid, 是不会通过的
+  getUUIDPipe(@Param('id', ParseUUIDPipe) id) {
+    console.info(typeof id, id);
+    return id;
   }
 
   /* @Post()

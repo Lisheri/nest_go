@@ -71,3 +71,10 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## 使用到的一些库
+
++ cheerio: 用于服务端操作DOM, 可以使用jsdom替换
++ axios: 发送网络请求(跨平台的), 可以使用require
++ class-validator: 提供一些字段的验证功能
++ class-transform: 在pipe的transform中进行调用其内部提供的实例化DTO类的方法, 同时将数据反射到DTO类中

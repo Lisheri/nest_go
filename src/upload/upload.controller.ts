@@ -3,7 +3,6 @@ import { UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import { zip } from 'compressing'; // 用于压缩并导出一个流
-// import { zip } from 'compressing'; // 用于压缩并导出一个流
 // import { createReadStream, statSync } from 'fs';
 // import { Blob } from 'node:buffer';
 

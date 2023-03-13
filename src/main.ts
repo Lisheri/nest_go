@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType } from '@nestjs/common';
+import { VersioningType, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session'; // 引入所有api
 // import type { Request, Response, NextFunction } from 'express';
 import * as cors from 'cors';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { Response } from '@/common/response';
+import { HttpFilter } from '@/common/filter';
 
 // ! 全局中间件, 不能使用类
 // ? 先经过全局中间件, 在经过模块中间件
@@ -43,6 +45,11 @@ async function bootstrap() {
     cookie: {httpOnly: true, maxAge: 999999999},
     rolling: true // 重新计算过期时间, 默认false
   }));
+  // 注入全局异常拦截器, 同样需要实例化
+  app.useGlobalFilters(new HttpFilter());
+  // 注入响应拦截器
+  app.useGlobalInterceptors(new Response());
+  app.useGlobalPipes(new ValidationPipe()); // 全局 transform pipe, 使用后就不用手动的再去搞了
   await app.listen(3000);
 }
 bootstrap();
