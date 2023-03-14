@@ -27,24 +27,27 @@ async function bootstrap() {
   // 使用 useStaticAssets 配置静态资源路径
   app.useStaticAssets(join(__dirname, 'images'), {
     // 配置访问前缀
-    prefix: '/images'
+    prefix: '/images',
   });
+  app.useStaticAssets(join(__dirname, 'cos'), { prefix: '/cos' });
   app.enableVersioning({
     // 设置RESTful版本类型
-    type: VersioningType.URI // 表示版本添加到请求头中
-  })
+    type: VersioningType.URI, // 表示版本添加到请求头中
+  });
   // 允许跨域, 中间件的调用顺序是按照use顺序来的
   app.use(cors());
   // app.use(MiddleWareAll);
-  console.info(session)
+  console.info(session);
   // 注入session模块, 其实和express是一样的
   // 同时可以指定配置参数
-  app.use(session({
-    secret: "fuck", // 生成服务端session签名
-    name: 'fucker.sid',
-    cookie: {httpOnly: true, maxAge: 999999999},
-    rolling: true // 重新计算过期时间, 默认false
-  }));
+  app.use(
+    session({
+      secret: 'fuck', // 生成服务端session签名
+      name: 'fucker.sid',
+      cookie: { httpOnly: true, maxAge: 999999999 },
+      rolling: true, // 重新计算过期时间, 默认false
+    }),
+  );
   // 注入全局异常拦截器, 同样需要实例化
   app.useGlobalFilters(new HttpFilter());
   // 注入响应拦截器
