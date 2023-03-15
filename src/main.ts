@@ -8,6 +8,8 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { Response } from '@/common/response';
 import { HttpFilter } from '@/common/filter';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+// import { RoleGuard } from '@/guard/role/role.guard';
 
 // ! 全局中间件, 不能使用类
 // ? 先经过全局中间件, 在经过模块中间件
@@ -53,6 +55,16 @@ async function bootstrap() {
   // 注入响应拦截器
   app.useGlobalInterceptors(new Response());
   app.useGlobalPipes(new ValidationPipe()); // 全局 transform pipe, 使用后就不用手动的再去搞了
+  const options = new DocumentBuilder()
+    .addBearerAuth()
+    .setTitle('fucker')
+    .setDescription('不可描述')
+    .setVersion('1')
+    .build(); // swagger配置
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('/api-docs', app, document);
+  // 使用全局守卫, 但是守卫一般使用局部的
+  // app.useGlobalGuards(new RoleGuard());
   await app.listen(3000);
 }
 bootstrap();
